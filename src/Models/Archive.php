@@ -74,7 +74,16 @@ class Archive
         $results = [];
 
         foreach ($resultCollection as $year) {
-            $results = array_merge($year, $results);
+            foreach ($year as $deliveryNote) {
+                if (
+                    isset($results[$deliveryNote->BELEG])
+                    && (int) $results[$deliveryNote->BELEG]->VERSION > (int) $deliveryNote->VERSION
+                ) {
+                    continue;
+                }
+
+                $results[$deliveryNote->BELEG] = $deliveryNote;
+            }
         }
 
         /*
